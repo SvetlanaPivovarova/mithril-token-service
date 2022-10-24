@@ -10,15 +10,27 @@ export const TokenComponent = function () {
                     tokens.map((item) => {
                         return m("li.token-list__item", [
                             m("p.token-list__item-url", item.url),
-                            m("p.token-list__item-token",
-                                { onclick: () => attrs.onTokenDelete(item) },
-                                item.token
-                            ),
-                            m("button.submit-btn", {onclick: function () {console.log("Delete?", item.url)}}, "Удалить"),
+                            m("p.token-list__item-token", item.token),
+                            m("button.submit-btn", {onclick: () => {
+                                attrs.confirmDeletion(item)
+                                attrs.current = item
+                                    console.log(attrs.current)
+                            }}, "Удалить"),
                         ])
                     })
                 ]),
             ])
-        }
+        },
+
+        current: {},
+        load: function (id) {
+            return m.request({
+                method: "GET",
+                url: "" + id,
+            })
+                .then(function (res) {
+                    User.current = res
+                })
+        },
     }
 }

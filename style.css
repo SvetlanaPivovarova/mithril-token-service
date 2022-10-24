@@ -153,7 +153,9 @@
     flex-basis: 70%;
 }
 
-
+.form__buttons-container {
+    display: flex;
+}
 
 @media screen and (max-width: 568px) {
     .form {

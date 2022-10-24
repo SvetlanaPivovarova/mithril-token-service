@@ -1,9 +1,11 @@
 import { TokenComponent } from "./TokenComponent.js";
 import { API_URL } from "./utils/constances.js";
 import { AddTokenForm } from "./AddTokenForm.js";
+import {DeleteTokenForm} from "./DeleteTokenForm.js";
 
 const model = {
-    tokens: []
+    tokens: [],
+    currentToken: {}
 }
 
 const StatePopup = {
@@ -40,7 +42,6 @@ const InfoTooltip = {
 }
 
 function createToken(url) {
-    console.log("new")
     return m.request({
         method: "POST",
         url: `${API_URL}/tokens`,
@@ -52,6 +53,20 @@ function createToken(url) {
         .then (function() {
             console.log("Успешно")
             StatePopup.message = "Токен добавлен"
+            StatePopup.openDialog()
+            m.route.set("/tokens")
+        })
+}
+
+function onTokenDelete(id) {
+    //const { _id } = token
+    return m.request({
+        method: "DELETE",
+        url: `${API_URL}/tokens/${id}/delete`,
+        //withCredentials: true,
+    })
+        .then (function() {
+            StatePopup.message = "Токен удален"
             StatePopup.openDialog()
             m.route.set("/tokens")
         })
@@ -72,8 +87,12 @@ function AppComponent() {
             })
     }
 
-    function onTokenDelete(token) {
-        console.log(token)
+    function confirmDeletion(item) {
+        console.log(item)
+        model.currentToken = item
+        console.log(model.currentToken)
+        m(DeleteTokenForm, { current: model.currentToken, onDelete: DeleteTokenForm })
+        m.route.set(`/token/${item._id}"/delete`)
     }
 
     return {
@@ -82,7 +101,7 @@ function AppComponent() {
         },
         view: function () {
             return m(".page", {}, [
-                m(TokenComponent, { tokens: model.tokens, onTokenDelete }),
+                m(TokenComponent, { tokens: model.tokens, confirmDeletion, current: model.currentToken }),
                 m(InfoTooltip, {}),
             ])
         }
@@ -93,10 +112,15 @@ m.route(document.body, "/add-token", {
     "/add-token": {
         view: function() {
             return [
-                m(AddTokenForm, { onCreate: createToken }),
+                m(AddTokenForm, { onCreate: onTokenDelete }),
                 m(InfoTooltip, {})
             ]
         }
     },
     "/tokens": AppComponent,
+    "/token/:id/delete": {
+        view: function (vnode) {
+            return m(DeleteTokenForm, { current: model.currentToken, onDelete: onTokenDelete })
+        }
+    },
 })
