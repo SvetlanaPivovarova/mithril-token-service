@@ -1,14 +1,14 @@
-export const AddTokenForm = function({ attrs }) {
+export const AddTokenForm = function() {
     let url = ''
 
     return {
-        view: function () {
-            return m("section.content", [
+        view: function ({ attrs }) {
+            return m("section", {class: "content page"}, [
                 m("h2.content__heading", "Добавить новый токен"),
                 m("form.form", {
                     onsubmit: function (e) {
                         e.preventDefault()
-                        attrs.createToken(url)
+                        attrs.onCreate(url)
                     }
                 }, [
                     m(".form__container", [
