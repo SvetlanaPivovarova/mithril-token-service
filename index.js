@@ -1,10 +1,11 @@
 import { TokenComponent } from "./TokenComponent.js";
 import { API_URL } from "./utils/constances.js";
 import { AddTokenForm } from "./AddTokenForm.js";
-import {DeleteTokenForm} from "./DeleteTokenForm.js";
+import { DeleteTokenForm } from "./DeleteTokenForm.js";
 
 const model = {
     tokens: [],
+    error: "",
     currentToken: {}
 }
 
@@ -48,27 +49,30 @@ function createToken(url) {
         body: {
             url: url
         },
-        //withCredentials: true,
     })
         .then (function() {
-            console.log("Успешно")
             StatePopup.message = "Токен добавлен"
             StatePopup.openDialog()
+            model.error = ""
             m.route.set("/tokens")
+        })
+        .catch((error) => {
+            console.log(error)
         })
 }
 
 function onTokenDelete(id) {
-    //const { _id } = token
     return m.request({
         method: "DELETE",
         url: `${API_URL}/tokens/${id}/delete`,
-        //withCredentials: true,
     })
         .then (function() {
             StatePopup.message = "Токен удален"
             StatePopup.openDialog()
             m.route.set("/tokens")
+        })
+        .catch((error) => {
+            console.log(error)
         })
 }
 
@@ -76,22 +80,27 @@ function AppComponent() {
     function getTokens() {
         m.request({
             method: "GET",
-            //url: 'http://localhost:3000/tokens'
             url: `${API_URL}/tokens`,
-            //withCredentials: true,
         })
             .then(function (result) {
-                console.log(result)
-                model.tokens = result
-                //m.redraw()
+                if (result) {
+                    model.tokens = result
+                }
+                if (!result) {
+                    model.error = "Ничего не найдено"
+                }
+            })
+            .catch((error) => {
+                console.log(error)
             })
     }
 
     function confirmDeletion(item) {
-        console.log(item)
         model.currentToken = item
-        console.log(model.currentToken)
-        m(DeleteTokenForm, { current: model.currentToken, onDelete: DeleteTokenForm })
+        m(DeleteTokenForm, {
+            current: model.currentToken,
+            onDelete: DeleteTokenForm
+        })
         m.route.set(`/token/${item._id}"/delete`)
     }
 
@@ -101,7 +110,12 @@ function AppComponent() {
         },
         view: function () {
             return m(".page", {}, [
-                m(TokenComponent, { tokens: model.tokens, confirmDeletion, current: model.currentToken }),
+                m(TokenComponent, {
+                    tokens: model.tokens,
+                    confirmDeletion,
+                    current: model.currentToken,
+                    error: model.error
+                }),
                 m(InfoTooltip, {}),
             ])
         }
@@ -112,7 +126,7 @@ m.route(document.body, "/add-token", {
     "/add-token": {
         view: function() {
             return [
-                m(AddTokenForm, { onCreate: onTokenDelete }),
+                m(AddTokenForm, { onCreate: createToken }),
                 m(InfoTooltip, {})
             ]
         }

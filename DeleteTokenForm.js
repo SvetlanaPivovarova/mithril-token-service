@@ -3,7 +3,7 @@ export const DeleteTokenForm = function() {
     return {
         view: function ({ attrs }) {
             console.log(attrs)
-            return m("section", {class: "popup popup_opened"}, [
+            return m("section", {class: "content page"}, [
                 m("h2.content__heading", "Вы точно хотите удалить данный токен для организации " + attrs.current.url + "?"),
                 m("form.form", {
                     onsubmit: function (e) {

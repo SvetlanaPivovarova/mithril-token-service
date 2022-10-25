@@ -15,13 +15,15 @@ export const AddTokenForm = function() {
                         m("input.form__text[type=url] [placeholder=Название домена]", {
                             oninput: function (e) {
                                 url = e.target.value
-                                console.log('url', url)
                             },
-                            //value: {}
                         }),
                         m("button.submit-btn[type=submit]", "Добавить")
                     ])
-                ])
+                ]),
+                m(m.route.Link, {
+                    class: "link",
+                    href: "/tokens",
+                }, "Список токенов")
             ])
         }
     }
