@@ -122,7 +122,8 @@ function AppComponent() {
     }
 }
 
-m.route(document.body, "/add-token", {
+m.route(document.body, "/tokens", {
+    "/tokens": AppComponent,
     "/add-token": {
         view: function() {
             return [
@@ -131,7 +132,6 @@ m.route(document.body, "/add-token", {
             ]
         }
     },
-    "/tokens": AppComponent,
     "/token/:id/delete": {
         view: function (vnode) {
             return m(DeleteTokenForm, { current: model.currentToken, onDelete: onTokenDelete })
