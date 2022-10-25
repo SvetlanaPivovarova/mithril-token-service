@@ -1,7 +1,7 @@
-import { TokenComponent } from "./TokenComponent.js";
+import { TokenComponent } from "./components/TokenComponent.js";
 import { API_URL } from "./utils/constances.js";
-import { AddTokenForm } from "./AddTokenForm.js";
-import { DeleteTokenForm } from "./DeleteTokenForm.js";
+import { AddTokenForm } from "./components/AddTokenForm.js";
+import { DeleteTokenForm } from "./components/DeleteTokenForm.js";
 
 const model = {
     tokens: [],
