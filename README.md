@@ -22,5 +22,4 @@
 
 **Размещение проекта**
 
-[mithril-token-service](https://svetlanapivovarova.github.io/mithril-token-service/) \
 [server](https://api.pivovarova.diploma.nomoredomains.xyz/)
