@@ -21,5 +21,4 @@
 * flex-верстка.
 
 **Размещение проекта**
-[token-service]()
 [server](https://api.pivovarova.diploma.nomoredomains.xyz/tokens)
